@@ -37,7 +37,7 @@ def cut(img, bbox):
 def process(img1, img2, bbox):
     img1 = cut(img1, bbox)
     img2 = cut(img2, bbox)
-    return img1.resize((args.size, args.size)), img2.resize((args.size, args.size))
+    return img1, img2
 
 
 def catagory(flaw_type, flaw_count):
@@ -80,9 +80,9 @@ def aug_collection(flaw_type, flaw_count):
                 img_array1 = np.array(img1)
                 img_array2 = np.array(img2)
                 transformed_img1, transformed_img2 = transform_image(img_array1, img_array2)
-                Image.fromarray(transformed_img1.eval(session=session)).resize((args.size, args.size)).save(
+                Image.fromarray(transformed_img1.eval(session=session)).save(
                     pjoin(PATH, 'temp', 'augpic' + str(flaw_count[flaw_type.index(type)]) + '.jpg'))
-                Image.fromarray(transformed_img2.eval(session=session)).resize((args.size, args.size)).save(
+                Image.fromarray(transformed_img2.eval(session=session)).save(
                     pjoin(PATH, 'trgt', 'augpic' + str(flaw_count[flaw_type.index(type)]) + '.jpg'))
                 if flaw_count[flaw_type.index(type)] == 600:
                     flag = True
@@ -159,7 +159,7 @@ if __name__ == '__main__':
 
     catagory(flaw_type, flaw_count)
 
-    # aug_collection(flaw_type, flaw_count)
+    aug_collection(flaw_type, flaw_count)
     #
     # split_data(flaw_type, "./data")
     #
