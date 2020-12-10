@@ -105,16 +105,16 @@ def split_data(flaw_type, file_path):
     random.shuffle(train_data)
     random.shuffle(test_data)
 
-    with open(pjoin(file_path, "train_data.txt"), "w+") as f:
+    with open(pjoin(file_path, "train_data.txt"), "wb+") as f:
         pickle.dump(train_data, f)
-    with open(pjoin(file_path, "test_data.txt"), "w+") as f:
+    with open(pjoin(file_path, "test_data.txt"), "wb+") as f:
         pickle.dump(test_data, f)
 
 
 def conv2numpy(file_path, flaw_type):
-    with open(pjoin(file_path, "train_data.txt"), "w+") as f:
+    with open(pjoin(file_path, "train_data.txt"), "rb") as f:
         train_data = pickle.load(f)
-    with open(pjoin(file_path, "test_data.txt"), "w+") as f:
+    with open(pjoin(file_path, "test_data.txt"), "rb") as f:
         test_data = pickle.load(f)
 
     x_train1, y_train, x_test1, y_test = [], [], [], []
