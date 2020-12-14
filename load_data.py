@@ -1,63 +1,55 @@
-#!/usr/bin/python3.6
-# -*- coding: utf-8 -*-
-# @Time    : 2020/12/6 3:09 下午
-# @Author  : zbl
-# @Email   : blzhu0823@gmail.com
-# @File    : load_data.py
-# @Software: PyCharm
-
-
-import argparse
 import os
-import json
 from os.path import join as pjoin
-from PIL import Image
-import tensorflow as tf
+import numpy as np
+import matplotlib.pyplot as plt
+import cv2
 
 
-def load_data(args):
-    datas = []
-    exs = ['.jpg', '.json']
-    data_path = args.data_path
-    paths = os.listdir(pjoin(data_path, 'label_json'))
-    labels_list = []
-    flaw_dict = {1: [0, "逃花"], 2: [0, "塞网"], 3: [0, "破洞"], 4: [0, "缝头"], 5: [0, "水渍"], 6: [0, "脏污"], 7: [0, "白条"],
-                 14: [0, "未对齐"], 16: [0, "伪色"], 17: [0, "前后色差"], 20: [0, "模板取错"], 21: [0, "漏浆"], 22: [0, "脱浆"],
-                 23: [0, "色纱"], 24: [0, "飞絮"]}
-    for path in paths:
-        prefixs = list(map(lambda s: s.split('.')[0], os.listdir(pjoin(data_path, 'label_json', path))))
-        for prefix in prefixs:
-            try:
-                img1 = Image.open(pjoin(data_path, 'temp', path, prefix + exs[0]))
-                img2 = Image.open(pjoin(data_path, 'trgt', path, prefix + exs[0]))
-                info = json.load(open(pjoin(data_path, 'label_json', path, prefix + exs[1]), encoding='utf-8'))
-            except:
-                continue
-            if info["flaw_type"] in flaw_dict:
-                datas.append({'img1': img1, 'img2': img2, 'info': info})
-                flaw_dict[info["flaw_type"]][0] += 1
-                labels_list.append(
-                    "maxl: {:4d} flaw_type: {} location: {} x0: {} x1: {} y0: {} y1: {}\n".format(
-                        max(info["bbox"]["x1"] - info["bbox"]["x0"], info["bbox"]["y1"] - info["bbox"]["y0"]),
-                        info["flaw_type"],
-                        pjoin(data_path, 'temp', path, prefix + exs[0]),
-                        info["bbox"]["x0"], info["bbox"]["x1"],
-                        info["bbox"]["y0"], info["bbox"]["y1"]))
 
-    labels_list.sort(key=lambda s: s[6:10], reverse=True)
-    collectedlabels = open("./info/label.txt", "w+", encoding="utf-8")
-    collectedlabels.writelines("各类别样本数量\n")
-    for key, value in flaw_dict.items():
-        collectedlabels.writelines("{:2d}({}): {}\n".format(key, value[1], value[0]))
-    collectedlabels.writelines("\n\n各样本信息\n")
-    for i in labels_list:
-        collectedlabels.writelines(i)
-    collectedlabels.close()
-    return datas
+#读取文件夹中的数据，如读取train文件夹中的数据
+def load_data_(data_path, class_list, size = 128):
+    X = []
+    Y = []
+    train_dirs = os.listdir(data_path)
+    for cls in range(len(class_list)):
+        y = cls
+        for t in class_list[cls]:
+            type = 'type' + str(t)
+            print('pre_processing: ', pjoin(data_path,type))
+            trgt_imgs = os.listdir(pjoin(data_path, type, 'trgt'))
+            temp_imgs = os.listdir(pjoin(data_path, type, 'temp'))
+            for i in range(len(trgt_imgs)):
+                # f_trgt, f_temp = open(pjoin(data_path, type, 'trgt', trgt_imgs[i]), 'rb'),  open(pjoin(data_path, type, 'temp', temp_imgs[i]), 'rb')
+                img_trgt = cv2.imread(pjoin(data_path, type, 'trgt', trgt_imgs[i]))
+                img_temp = cv2.imread(pjoin(data_path, type, 'temp', temp_imgs[i]))
+                #数据预处理
+                x = process(img_trgt, img_temp, size)
+                X.append(x)
+                Y.append(y)
+                # f_trgt.close()
+                # f_temp.close()
+    return np.array(X), np.array(Y)
+
+#读取train和test文件夹中的数据
+def load_data(data_path=r'./data/cutted_data',size = 64, class_list = '[[1], [2], [14]]'):
+    class_list_ = eval(class_list)
+    train_X, train_Y = load_data_(pjoin(data_path, 'train'), class_list_, size=size)
+    test_X, test_Y = load_data_(pjoin(data_path, 'test'), class_list_, size=size)
+    return train_X, train_Y, test_X, test_Y
 
 
-if __name__ == '__main__':
-    parser = argparse.ArgumentParser()
-    parser.add_argument('-data_path', default='./data/fabric_data_new', type=str)
-    args = parser.parse_args()
-    datas = load_data(args)
+def diff(img1, img2):
+    return cv2.absdiff(img1,img2)
+
+
+def resize(img, size):
+    img = cv2.resize(img, dsize = (size,size))
+    return img
+
+def process(img1,img2, size):
+    img = diff(img1, img2)
+    img = resize(img, size)
+    return np.array(img)
+
+
+

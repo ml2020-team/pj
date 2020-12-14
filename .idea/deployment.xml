@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="PublishConfigData" autoUpload="Always" serverName="xzy@10.176.56.5:10002">
+    <serverData>
+      <paths name="xzy@10.176.56.5:10002">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/home/xzy/pj" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="小视频服务器">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/pj" local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+    </serverData>
+    <option name="myAutoUpload" value="ALWAYS" />
+  </component>
+</project>
