@@ -138,13 +138,13 @@
 
 ### 简单cnn
 
-#### test1.py
+#### model_simple_cnn.py
 
 
 
 ### 逻辑回归
 
-#### test2.py
+#### model_logistic.py
 
 
 
