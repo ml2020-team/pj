@@ -6,7 +6,7 @@ import random
 
 import numpy as np
 from sklearn.model_selection import train_test_split
-from load_raw_data import load_data
+from load_raw_data import load_data 
 from augmentation import transform_image
 from os.path import join as pjoin
 from PIL import Image
@@ -95,7 +95,7 @@ def aug_collection(flaw_type, flaw_count, test_ratio=0.2):
         for path in paths:
             print("aug_collection: ", path)
             f1 = open(pjoin(PATH, 'temp', path),'rb')
-            f2 = open(pjoin(PATH, 'temp', path),'rb')
+            f2 = open(pjoin(PATH, 'trgt', path),'rb')
             img1 = Image.open(f1)
             img2 = Image.open(f2)
             img1.load()

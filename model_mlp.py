@@ -37,12 +37,12 @@ class_num = 3
 
 
 
-class_list = '[[4], [2], [1]]'
+class_list = '[[1],[2],[14]]'
 # class_list = '[[1], [2], [3], [4], [5], [6], [7], [14], [16], [17], [20], [21], [22], [23], [24]]'
 class_num = len(eval(class_list))
 img_size = 50
 
-train_X, train_Y, test_X, test_Y  = load_data(data_path = r'./data/cutted_data', size = img_size, class_list = class_list)
+train_X, train_Y, test_X, test_Y  = load_data(data_path = r'./data/cutted_data', size = img_size, class_list = class_list, augmentate= False)
 train_Y = np.expand_dims(train_Y, axis=1)
 test_Y = np.expand_dims(test_Y, axis=1)
 
