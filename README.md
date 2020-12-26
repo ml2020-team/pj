@@ -19,36 +19,31 @@
 
 瑕疵块最大边长2048，最小边长51
 
-## 获取训练、测试数据（已完成预处理，可直接送入网络）
- 有两种方法，使用load_data.py中的load_data函数或者直接读取./data/task1（3分类)、./data/task2(5分类)、./data/task3(15分类)中的.npy文件。
+## __load_data__
+ * __load_data(data_path=r'./data/cutted_data',size = 64, class_list = '[[1], [2], [14]]', process_mod='diff', resize_mod='padding', augmentate = True)__
  
- * __load_data(data_path=r'./data/cutted_data',size = 64, class_list = '[[1], [2], [14]]')__
- 
- 该函数读取经过裁剪和数据增强（对训练数据进行翻转，旋转等以增加训练数据）后的图片，并对图片对进行差分和缩放，以np.array格式返回。
- 
- 参数释义：
- 
- *__data_path__*:数据路径
- 
- *__size__*:将裁剪后大小不一的图片统一缩放为size\*size\*3
- 
- *__class_list__* 分类方式,格式为字符串。
- 
- __例__：
- 
- *class_list = '[[1], [2], [14]]'*
- 
- 表示type1，type2, type14各为一类
- 
- *class_list = '[[1,2,3], [4,5], [14]]'*
- 
- 表示type1,type2,type3合并为一类，type4，type5合并为一类，type14单独为一类。
- 
- 以np.array格式返回：
+ __返回内容：__
  
  return train_X, train_Y, test_X, test_Y
  
- * __也可以直接读取./data/task1（3分类)、./data/task2(5分类)、./data/task3(15分类)中的.npy文件。__
+ __参数释义：__
+ 
+ * *__data_path__*:数据路径
+ 
+ * *__size__*:将裁剪后大小不一的图片统一缩放为size\*size\*3
+ 
+ * *__class_list__* 分类方式,格式为字符串。
+ 
+ 　　　__例__：
+ 
+ 　　　* __*class_list = '[[1], [2], [14]]'*__
+ 
+ 　　　表示type1，type2, type14各为一类
+ 
+ 　　　* __*class_list = '[[1,2,3], [4,5], [14]]'*__
+ 
+　 　　表示type1,type2,type3合并为一类，type4，type5合并为一类，type14单独为一类。
+ 
 
 
 
