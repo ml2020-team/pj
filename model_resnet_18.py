@@ -72,10 +72,10 @@ def ResNet18():
     return ResNet(ResidualBlock)
 
 #加载数据
-x_train = np.load("./data/task1/x_train.npy")
-y_train = np.load("./data/task1/y_train.npy")
-x_test = np.load("./data/task1/x_test.npy")
-y_test = np.load("./data/task1/y_test.npy")
+x_train = np.load("E:/2020-2021/机器学习理论/MLdata/task1/size=64/1_task1_trgt_padding/x_train.npy")
+y_train = np.load("E:/2020-2021/机器学习理论/MLdata/task1/size=64/1_task1_trgt_padding/y_train.npy")
+x_test = np.load("E:/2020-2021/机器学习理论/MLdata/task1/size=64/1_task1_trgt_padding/x_test.npy")
+y_test = np.load("E:/2020-2021/机器学习理论/MLdata/task1/size=64/1_task1_trgt_padding/y_test.npy")
 x_train = torch.from_numpy(x_train)
 x_train = x_train.type('torch.FloatTensor')
 y_train = torch.from_numpy(y_train)
