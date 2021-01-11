@@ -6,6 +6,9 @@ import numpy as np
 from torch.utils.data import Dataset, DataLoader,TensorDataset
 from torch.autograd import Variable
 from matplotlib import pyplot as plt
+import os
+
+os.environ['KMP_DUPLICATE_LIB_OK'] = 'TRUE'
 
 class ResidualBlock(nn.Module):
     def __init__(self, inchannel, outchannel, stride=1):
@@ -54,18 +57,16 @@ class ResNet(nn.Module):
         return nn.Sequential(*layers)
 
     def forward(self, x):
+        #print('forward')
         x = np.transpose(x,(0,3,1,2))
-        #print(x.shape)
         out = self.conv1(x)
         out = self.layer1(out)
         out = self.layer2(out)
         out = self.layer3(out)
         out = self.layer4(out)
-        out = F.avg_pool2d(out, 4)
+        out = F.avg_pool2d(out, 3)
         out = out.view(out.size(0), -1)
         out = self.fc(out)
-        n = nn.Dropout(p=0.5)
-        out = n(out)
         return out
 
 def ResNet18():
@@ -78,6 +79,7 @@ x_test = np.load("E:/2020-2021/机器学习理论/MLdata/task1/size=64/1_task1_t
 y_test = np.load("E:/2020-2021/机器学习理论/MLdata/task1/size=64/1_task1_trgt_padding/y_test.npy")
 x_train = torch.from_numpy(x_train)
 x_train = x_train.type('torch.FloatTensor')
+#print(x_train.shape)
 y_train = torch.from_numpy(y_train)
 y_train = y_train.type('torch.LongTensor')
 x_test = torch.from_numpy(x_test)
@@ -85,13 +87,13 @@ x_test = x_test.type('torch.FloatTensor')
 y_test = torch.from_numpy(y_test)
 y_test = y_test.type('torch.LongTensor')
 train_dataset=TensorDataset(x_train, y_train)
-train_loader = DataLoader(train_dataset, batch_size=256, shuffle=True)
+train_loader = DataLoader(train_dataset, batch_size=64, shuffle=True)
 test_dataset=TensorDataset(x_test, y_test)
-test_loader = DataLoader(test_dataset, batch_size=256, shuffle=True)
+test_loader = DataLoader(test_dataset, batch_size=64, shuffle=True)
 
 #超参数设置
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-EPOCH=50
+EPOCH=10
 pre_epoch=0
 LR=0.0001
 
@@ -105,18 +107,19 @@ y=[]
 plt.figure(figsize=(10,10))
 def train(epoch):
     for batch_idx, (data, target) in enumerate(train_loader):
+        #print('train')
         data, target = Variable(data), Variable(target)
+        #print(data.shape)
+        optimizer.zero_grad()
         output = net(data)
         loss = criterion(output, target)
         loss.backward()
         optimizer.step()
-        if batch_idx % 200 ==0:
+        if batch_idx % 100 ==0:
             print('Train Epoch: {}\tLoss: {:.6f};'.format(epoch, loss.item()))
             x.append(epoch)
             y.append(loss.item())
-            plt.plot(x, y, color='navy')
-            plt.title('loss')
-            plt.show()
+
 
 def test():
     test_loss = 0
@@ -124,6 +127,7 @@ def test():
     # i = 0
     for data, target in test_loader:
         data, target = Variable(data, volatile=True), Variable(target)
+        print(data.shape)
         output = net(data)
         loss = criterion(output, target)
         test_loss += loss
@@ -142,6 +146,9 @@ def test():
 for epoch in range(EPOCH):
     train(epoch)
     test()
+    plt.plot(x, y, color='navy')
+    plt.title('loss')
+    plt.show()
 
 
 
