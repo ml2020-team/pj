@@ -127,7 +127,7 @@ def test():
     # i = 0
     for data, target in test_loader:
         data, target = Variable(data, volatile=True), Variable(target)
-        print(data.shape)
+        #print(data.shape)
         output = net(data)
         loss = criterion(output, target)
         test_loss += loss
@@ -139,16 +139,17 @@ def test():
     # print(i)
 
     test_loss /= len(test_loader.dataset)
-    print('\nTest set: Average loss: {:.4f}, Accuracy: {}/{} ({:.0f}%)\n'.format(
+    print('\nTest set: Average loss: {:.4f}, Accuracy: {}/{} ({:.2f}%)\n'.format(
         test_loss.item(), correct, len(test_loader.dataset),
         100. * correct / len(test_loader.dataset)))
 
 for epoch in range(EPOCH):
     train(epoch)
     test()
-    plt.plot(x, y, color='navy')
-    plt.title('loss')
-    plt.show()
+
+plt.plot(x, y, color='navy')
+plt.title('loss')
+plt.show()
 
 
 
