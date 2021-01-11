@@ -4,10 +4,11 @@ import os
 from os.path import join as pjoin
 print(tf.__version__)
 
-x_train = np.load("./info/task1/x_train.npy")
-y_train = np.load("./info/task1/y_train.npy")
-x_test = np.load("./info/task1/x_test.npy")
-y_test = np.load("./info/task1/y_test.npy")
+x_train = np.load("./data/task1/x_train.npy")
+print(x_train.shape)
+y_train = np.load("./data/task1/y_train.npy")
+x_test = np.load("./data/task1/x_test.npy")
+y_test = np.load("./data/task1/y_test.npy")
 
 x_train = x_train * 1.0 / 127.5 - 1
 x_test = x_test * 1.0 / 127.5 - 1
