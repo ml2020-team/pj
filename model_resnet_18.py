@@ -34,7 +34,7 @@ class ResidualBlock(nn.Module):
         return out
 
 class ResNet(nn.Module):
-    def __init__(self, ResidualBlock, num_classes=5):
+    def __init__(self, ResidualBlock, num_classes=3):
         super(ResNet, self).__init__()
         self.inchannel = 64
         self.conv1 = nn.Sequential(
@@ -64,7 +64,7 @@ class ResNet(nn.Module):
         out = self.layer2(out)
         out = self.layer3(out)
         out = self.layer4(out)
-        out = F.avg_pool2d(out, 5)
+        out = F.avg_pool2d(out, 3)
         out = out.view(out.size(0), -1)
         out = self.fc(out)
         return out
@@ -73,10 +73,10 @@ def ResNet18():
     return ResNet(ResidualBlock)
 
 #加载数据
-x_train = np.load("E:/2020-2021/机器学习理论/MLdata/task2/size=64/6_avg_pool_padding_augment/x_train.npy")
-y_train = np.load("E:/2020-2021/机器学习理论/MLdata/task2/size=64/6_avg_pool_padding_augment/y_train.npy")
-x_test = np.load("E:/2020-2021/机器学习理论/MLdata/task2/size=64/6_avg_pool_padding_augment/x_test.npy")
-y_test = np.load("E:/2020-2021/机器学习理论/MLdata/task2/size=64/6_avg_pool_padding_augment/y_test.npy")
+x_train = np.load("E:/2020-2021/机器学习理论/MLdata/task1/size=64/1_task1_trgt_padding/x_train.npy")
+y_train = np.load("E:/2020-2021/机器学习理论/MLdata/task1/size=64/1_task1_trgt_padding/y_train.npy")
+x_test = np.load("E:/2020-2021/机器学习理论/MLdata/task1/size=64/1_task1_trgt_padding/x_test.npy")
+y_test = np.load("E:/2020-2021/机器学习理论/MLdata/task1/size=64/1_task1_trgt_padding/y_test.npy")
 x_train = torch.from_numpy(x_train)
 x_train = x_train.type('torch.FloatTensor')
 #print(x_train.shape)
