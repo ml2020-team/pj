@@ -124,7 +124,7 @@ task2
 
 经过数据预处理，在```file_path/taskx/```路径下存放着任务```x```所需的训练集和测试集的```.npy```数据文件
 
-# 训练函数接口
+# 模型训练测试函数接口
 
 ### 简单cnn
 
@@ -138,8 +138,13 @@ task2
 
 ### SVM
 
+#### model_svm.py
+
 ### ResNet-18
+
+#### model_resnet_18.py
 
 ### 决策树
 
+#### model_decisionTree.py
 
