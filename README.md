@@ -1,24 +1,37 @@
-## 更新后的数据集
+## 数据集文件形式 
+我们将预处理后的数据保存为.npy格式 
 
-各类别样本数量
- 1(逃花): 143
- 2(塞网): 254
- 3(破洞): 10
- 4(缝头): 319
- 5(水渍): 9
- 6(脏污): 47
- 7(白条): 8
-14(未对齐): 562
-16(伪色): 7
-17(前后色差): 25
-20(模板取错): 197
-21(漏浆): 7
-22(脱浆): 16
-23(色纱): 7
-24(飞絮): 23
+每个分类任务分别提供了3种图片大小和6种预处理方式
 
-瑕疵块最大边长2048，最小边长51
+数据集文件结构如下：
 
+task1
+
+|-size=64
+
+|-|-1_task1_trgt_padding
+
+|-|-2_diff_scale
+
+|-|-3_diff_padding
+
+|-|-4_diff_padding_augment
+
+|-|-5_max_pool_padding_augment
+
+|-|-6_avg_pool_padding_augment
+
+|-size=127
+
+...
+
+|-size=256
+
+...
+
+task2
+
+...
 ## __load_data__
  * __load_data(data_path=r'./data/cutted_data',size = 64, class_list = '[[1], [2], [14]]', process_mod='diff', resize_mod='padding', augmentate = True)__
  
