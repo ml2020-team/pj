@@ -32,7 +32,11 @@ task1
 task2
 
 ...
-## __load_data__
+
+
+## 预处理函数接口
+
+### __读取图片并进行池化、差分、resize：load_data__
  * __load_data(data_path=r'./data/cutted_data',size = 64, class_list = '[[1], [2], [14]]', process_mod='diff', resize_mod='padding', augmentate = True)__
  
  __返回内容：__
@@ -80,49 +84,7 @@ task2
 * *__augmentate__*:是否使用数据增强，为Ture则使用数据增强后的新增数据，否则只使用原数据集中的图片。
 
 
-## 数据预处理
-
-#### data_augment.py
-
-* read_img(img)
-
-  功能：将图片转换成numpy数组
-
-* cut(img, bbox)
-
-  功能：根据标注边框进行裁剪,返回裁剪后的局部图片
-
-* diff(img1, img2)
-
-  功能：返回两张图片的numpy数组差分后的numpy数组
-
-* process(img1, img2, bbox)
-
-  功能：对一对样本图片进行裁剪
-
-* mkdir(root_path, flaw_type)
-
-  功能：删除已经存在的数据目录，新建空的数据目录，```flaw_type```是瑕疵类别集合
-
-* catagory(flaw_type)
-
-  功能：把原始数据集的每对样本图片（模板图和瑕疵图）用```process```处理，然后把差分图按照瑕疵类别分类存放。对于瑕疵类别 x，把该类的差分图存进```args.catagory_cut_raw_data_path/typex```目录下
-
-* split_data(flaw_type, file_path)
-
-  功能：在```catagory```原始数据集后，划分训练集和测试集，```file_path```是划分后的训练集(```train.txt```)和测试集(```test.txt```)的存放路径（这里是按照文件名划分数据集的）。存储的内容是```list```，```list```每个元素的格式为：```[flaw_type, path]```。```flaw_type```是瑕疵类别，```path```是文件名。根据瑕疵类别和文件名就能确定一个差分图文件。例如```[1, pic1.jpg]```表示差分图文件路径```args.catagory.../type1/pic1.jpg```
-
-* pre_aug(flaw_type, file_path)
-
-  功能：做增强数据集前的准备工作，创建目录，把训练集数据分类存储到```args.augmentated_data_path/```目录下
-
-* aug_collection(flaw_type, flaw_count)
-
-  功能：对每类瑕疵的训练集调用```augmentation.py```文件中的```transform_image```进行数据增强，把每类瑕疵的训练集样本数增加到```pic_number```。程序运行完，对于瑕疵类别x，```args.aug.../typex/```目录下有```pic_number```个图片
-
-* conv2numpy(flaw_type, file_path)
-
-  功能：从```args.augmentated_data_path/```读出增强后的训练集数据，根据```test.txt```从```args.catagory_cut_raw_data_path/```读出测试集数据，把训练集和测试集的数据图片```resize```后转换成numpy数组存储起来。最后，对于任务```x```(1,2,3)，```file_path/taskx/```路径下存放有训练集数据```x_train.npy```，```y_train.npy```，测试集数据```x_test.npy```，```y_test.npy```。此时瑕疵类别已经转换成0, 1, ..., 14，而不是1, 2, ..., 24了
+### 数据增强：
 
 #### augmentation.py
 
@@ -162,7 +124,7 @@ task2
 
 经过数据预处理，在```file_path/taskx/```路径下存放着任务```x```所需的训练集和测试集的```.npy```数据文件
 
-## 算法介绍
+# 训练函数接口
 
 ### 简单cnn
 
@@ -174,13 +136,10 @@ task2
 
 #### model_logistic.py
 
+### SVM
 
+### ResNet-18
 
-## 实验结果
+### 决策树
 
-|               |                           简单cnn                            |   逻辑回归   | DecisionTree | Resnet-18 | mlp |
-| :-----------: | :----------------------------------------------------------: | :----------: | :-----:| :-------: | :-----: |
-| task1(3分类)  |       acc:0.79 class0:0.65 class1:0.84 class2:0.79       | acc:0.56 | 0.612| 0.70 | 0.63 |
-| task2(5分类)  | acc:0.74 class0:0.65 class1:0.83 class2:0.86 class3:0.68 class4:0.68 | acc:0.48 |0.418| 0.65 |
-| task3(15分类) |                           结果太差                           |   结果太差   |0.265|
 
